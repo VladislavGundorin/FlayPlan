@@ -1,0 +1,29 @@
+type Query {
+    flightPlans: [FlightPlan]
+}
+
+type FlightPlan {
+    id: ID
+    flightNumber: String
+    airline: String
+    pilot: Pilot
+    route: [Waypoint]
+    altitude: Int
+    departureTime: String
+    arrivalTime: String
+    status: String
+}
+
+type Pilot {
+    id: ID
+    name: String
+    licenseNumber: String
+    contactInfo: String
+}
+
+type Waypoint {
+    id: ID
+    latitude: Float
+    longitude: Float
+    altitude: Int
+}
