@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface FlightPlanRepository extends JpaRepository<FlightPlan, UUID> {
-    List<FlightPlan> findByStatus(FlightStatus status);
-
-    List<FlightPlan> findByApprovalStatus_StatusAndApprovalStatus_Authority_Name(ApprovalStatus status, String authorityName);
+//    List<FlightPlan> findByStatus(FlightStatus status);
+//
+//    List<FlightPlan> findByApprovalStatus_StatusAndApprovalStatus_Authority_Name(ApprovalStatus status, String authorityName);
 }

@@ -1,29 +1,83 @@
-type Query {
-    flightPlans: [FlightPlan]
+type Waypoint {
+    id: ID
+    latitude: Float
+    longitude: Float
+    altitude: Int
+}
+
+enum FlightStatus {
+    PENDING
+    APPROVED
+    REJECTED
 }
 
 type FlightPlan {
     id: ID
     flightNumber: String
     airline: String
-    pilot: Pilot
+    pilotId: ID
     route: [Waypoint]
     altitude: Int
     departureTime: String
     arrivalTime: String
-    status: String
+    status: FlightStatus
+    airspaceAuthorityIds: [ID]
+    approvalId: ID
 }
 
 type Pilot {
-    id: ID
-    name: String
-    licenseNumber: String
+    id: ID!
+    name: String!
+    licenseNumber: String!
     contactInfo: String
 }
 
-type Waypoint {
-    id: ID
-    latitude: Float
-    longitude: Float
-    altitude: Int
+# Объединенный тип Query
+type Query {
+    getFlightPlanById(id: ID!): FlightPlan
+    getAllFlightPlans: [FlightPlan]
+
+    getPilotById(id: ID!): Pilot
+    getAllPilots: [Pilot!]!
+}
+
+type Mutation {
+    createFlightPlan(
+        flightNumber: String!,
+        airline: String!,
+        pilotId: ID!,
+        route: [WaypointInput]!,
+        altitude: Int!,
+        departureTime: String!,
+        arrivalTime: String!,
+        status: FlightStatus!,
+        airspaceAuthorityIds: [ID!],
+        approvalId: ID!
+    ): FlightPlan
+
+    updateFlightPlan(
+        id: ID!,
+        flightNumber: String!,
+        airline: String!,
+        pilotId: ID!,
+        route: [WaypointInput]!,
+        altitude: Int!,
+        departureTime: String!,
+        arrivalTime: String!,
+        status: FlightStatus!,
+        airspaceAuthorityIds: [ID!],
+        approvalId: ID!
+    ): FlightPlan
+
+    deleteFlightPlan(id: ID!): Boolean
+
+    createPilot(name: String!, licenseNumber: String!, contactInfo: String): Pilot!
+    patchPilot(id: ID!, name: String, licenseNumber: String, contactInfo: String): Pilot!
+    deletePilot(id: ID!): Boolean!
+}
+
+input WaypointInput {
+    latitude: Float!
+    longitude: Float!
+    altitude: Int!
 }

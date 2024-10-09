@@ -1,7 +1,7 @@
-package org.example.flayplan.exception;
-
-public class ResourceNotFoundException extends RuntimeException {
-    public ResourceNotFoundException(String message) {
-        super(message);
-    }
-}
+//package org.example.flayplan.exception;
+//
+//public class ResourceNotFoundException extends RuntimeException {
+//    public ResourceNotFoundException(String message) {
+//        super(message);
+//    }
+//}

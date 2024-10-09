@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AuditLogRepository extends JpaRepository<AuditLog, UUID> {
-    List<AuditLog> findByTimestampBetween(LocalDateTime startTime, LocalDateTime endTime);
+//    List<AuditLog> findByTimestampBetween(LocalDateTime startTime, LocalDateTime endTime);
 }

@@ -24,9 +24,9 @@ public class FlightPlan {
     @JoinColumn(name = "flight_plan_id")
     private List<Waypoint> route;
 
-    private int altitude;
-    private LocalDateTime departureTime;
-    private LocalDateTime arrivalTime;
+    private Integer altitude;
+    private String  departureTime;
+    private String  arrivalTime;
 
     @Enumerated(EnumType.STRING)
     private FlightStatus status;
@@ -43,7 +43,7 @@ public class FlightPlan {
     @JoinColumn(name = "approval_id")
     private Approval approvalStatus;
 
-    public FlightPlan(String flightNumber, String airline, Pilot pilot, List<Waypoint> route, int altitude, LocalDateTime departureTime, LocalDateTime arrivalTime, FlightStatus status, List<AirspaceAuthority> airspaceAuthorities, Approval approvalStatus, LocalDateTime submittedAt) {
+    public FlightPlan(String flightNumber, String airline, Pilot pilot, List<Waypoint> route, int altitude, String  departureTime, String  arrivalTime, FlightStatus status, List<AirspaceAuthority> airspaceAuthorities, Approval approvalStatus, LocalDateTime now) {
         this.flightNumber = flightNumber;
         this.airline = airline;
         this.pilot = pilot;
@@ -54,7 +54,6 @@ public class FlightPlan {
         this.status = status;
         this.airspaceAuthorities = airspaceAuthorities;
         this.approvalStatus = approvalStatus;
-        this.submittedAt = submittedAt;
     }
 
     public FlightPlan() {
@@ -110,19 +109,19 @@ public class FlightPlan {
         this.altitude = altitude;
     }
 
-    public LocalDateTime getDepartureTime() {
+    public String  getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(LocalDateTime departureTime) {
+    public void setDepartureTime(String  departureTime) {
         this.departureTime = departureTime;
     }
 
-    public LocalDateTime getArrivalTime() {
+    public String  getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(LocalDateTime arrivalTime) {
+    public void setArrivalTime(String  arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 

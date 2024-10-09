@@ -62,8 +62,8 @@ public class DataInitializer implements CommandLineRunner {
         flightPlan1.setPilot(pilot1);
         flightPlan1.setRoute(Arrays.asList(new Waypoint(12.34, 56.78, 30000)));
         flightPlan1.setAltitude(30000);
-        flightPlan1.setDepartureTime(LocalDateTime.now().plusHours(1));
-        flightPlan1.setArrivalTime(LocalDateTime.now().plusHours(3));
+        flightPlan1.setDepartureTime(LocalDateTime.now().plusHours(1).toString());
+        flightPlan1.setArrivalTime(LocalDateTime.now().plusHours(3).toString());
         flightPlan1.setStatus(FlightStatus.PENDING);
         flightPlan1.setAirspaceAuthorities(Arrays.asList(authority));
         flightPlan1.setApprovalStatus(approval);
