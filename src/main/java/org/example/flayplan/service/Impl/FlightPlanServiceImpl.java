@@ -12,11 +12,11 @@ import org.example.flayplan.repository.ApprovalRepository;
 import org.example.flayplan.service.FlightPlanService;
 import org.example.flayplan.service.dtos.FlightPlanDTO;
 import org.example.flayplan.service.dtos.WaypointDTO;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -25,46 +25,48 @@ public class FlightPlanServiceImpl implements FlightPlanService {
 
     @Autowired
     private FlightPlanRepository flightPlanRepository;
-
     @Autowired
     private PilotRepository pilotRepository;
-
     @Autowired
     private AirspaceAuthorityRepository airspaceAuthorityRepository;
     @Autowired
     private ApprovalRepository approvalRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public FlightPlanDTO createFlightPlan(FlightPlanDTO dto) {
+        FlightPlan flightPlan = modelMapper.map(dto, FlightPlan.class);
+
         Pilot pilot = pilotRepository.findById(dto.getPilotId())
-                .orElseThrow(() -> new RuntimeException("Pilot not found"));
+                .orElseThrow(() -> new RuntimeException("Pilot not found with ID: " + dto.getPilotId()));
+        flightPlan.setPilot(pilot);
 
         List<Waypoint> waypoints = dto.getRoute().stream()
-                .map(waypointDto -> new Waypoint(waypointDto.getLatitude(), waypointDto.getLongitude(), waypointDto.getAltitude()))
+                .map(waypointDto -> modelMapper.map(waypointDto, Waypoint.class))
                 .collect(Collectors.toList());
+        flightPlan.setRoute(waypoints);
 
         List<AirspaceAuthority> airspaceAuthorities = dto.getAirspaceAuthorityIds().stream()
                 .map(authorityId -> airspaceAuthorityRepository.findById(authorityId)
-                        .orElseThrow(() -> new RuntimeException("Airspace Authority not found")))
+                        .orElseThrow(() -> new RuntimeException("Airspace Authority not found with ID: " + authorityId)))
                 .collect(Collectors.toList());
+        flightPlan.setAirspaceAuthorities(airspaceAuthorities);
 
         Approval approvalStatus = approvalRepository.findById(dto.getApprovalId())
-                .orElseThrow(() -> new RuntimeException("Approval not found"));
-
-        FlightPlan flightPlan = new FlightPlan();
-        flightPlan.setFlightNumber(dto.getFlightNumber());
-        flightPlan.setAirline(dto.getAirline());
-        flightPlan.setPilot(pilot);
-        flightPlan.setRoute(waypoints);
-        flightPlan.setAltitude(dto.getAltitude());
-        flightPlan.setDepartureTime(dto.getDepartureTime());
-        flightPlan.setArrivalTime(dto.getArrivalTime());
-        flightPlan.setStatus(dto.getStatus());
-        flightPlan.setAirspaceAuthorities(airspaceAuthorities);
+                .orElseThrow(() -> new RuntimeException("Approval not found with ID: " + dto.getApprovalId()));
         flightPlan.setApprovalStatus(approvalStatus);
 
         flightPlan = flightPlanRepository.save(flightPlan);
-        return convertToDTO(flightPlan);
+
+        FlightPlanDTO resultDto = modelMapper.map(flightPlan, FlightPlanDTO.class);
+        resultDto.setAirspaceAuthorityIds(
+                flightPlan.getAirspaceAuthorities().stream()
+                        .map(AirspaceAuthority::getId)
+                        .collect(Collectors.toList())
+        );
+
+        return resultDto;
     }
 
     @Override

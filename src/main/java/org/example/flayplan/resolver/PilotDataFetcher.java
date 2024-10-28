@@ -35,7 +35,7 @@ public class PilotDataFetcher {
         PilotDTO pilotDTO = new PilotDTO();
         pilotDTO.setName(name);
         pilotDTO.setLicenseNumber(licenseNumber);
-        pilotDTO.setContactInfo(contactInfo); // Добавляем контактную информацию
+        pilotDTO.setContactInfo(contactInfo);
         return pilotService.createPilot(pilotDTO);
     }
 
@@ -49,14 +49,14 @@ public class PilotDataFetcher {
             pilotDTO.setLicenseNumber(licenseNumber);
         }
         if (contactInfo != null) {
-            pilotDTO.setContactInfo(contactInfo); // Обновляем контактную информацию
+            pilotDTO.setContactInfo(contactInfo);
         }
-        return pilotService.updatePilot(UUID.fromString(id), pilotDTO); // Используем updatePilot
+        return pilotService.updatePilot(UUID.fromString(id), pilotDTO);
     }
 
     @DgsMutation
     public Boolean deletePilot(String id) {
-        pilotService.deletePilot(UUID.fromString(id)); // Исправляем на deletePilot
+        pilotService.deletePilot(UUID.fromString(id));
         return true;
     }
 }

@@ -1,17 +1,16 @@
 package org.example.flayplan.service.Impl;
 
-import org.example.flayplan.enums.ApprovalStatus;
 import org.example.flayplan.model.Approval;
 import org.example.flayplan.model.AirspaceAuthority;
 import org.example.flayplan.repository.ApprovalRepository;
 import org.example.flayplan.repository.AirspaceAuthorityRepository;
 import org.example.flayplan.service.ApprovalService;
 import org.example.flayplan.service.dtos.ApprovalDTO;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -24,21 +23,23 @@ public class ApprovalServiceImpl implements ApprovalService {
     @Autowired
     private AirspaceAuthorityRepository airspaceAuthorityRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
     public ApprovalDTO createApproval(ApprovalDTO dto) {
         AirspaceAuthority authority = airspaceAuthorityRepository.findById(dto.getAuthorityId())
-                .orElseThrow(() -> new RuntimeException("Airspace authority not found"));
+                .orElseThrow(() -> new RuntimeException("Airspace Authority not found with ID: " + dto.getAuthorityId()));
 
-        Approval approval = new Approval();
-        approval.setAuthority(authority);
-        approval.setStatus(dto.getStatus());
-        approval.setApprovedBy(dto.getApprovedBy());
-        approval.setApprovedAt(dto.getApprovedAt());
-        approval.setComments(dto.getComments());
-
-        approval = approvalRepository.save(approval);
-        return new ApprovalDTO(approval.getId(), dto.getAuthorityId(), approval.getStatus(),
-                approval.getApprovedBy(), approval.getApprovedAt(), approval.getComments());
+        Approval approval = new Approval(
+                authority,
+                dto.getStatus(),
+                dto.getApprovedBy(),
+                dto.getApprovedAt(),
+                dto.getComments()
+        );
+        Approval savedApproval = approvalRepository.save(approval);
+        return modelMapper.map(savedApproval, ApprovalDTO.class);
     }
 
     @Override

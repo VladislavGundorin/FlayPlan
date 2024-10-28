@@ -43,7 +43,8 @@ public class FlightPlan {
     @JoinColumn(name = "approval_id")
     private Approval approvalStatus;
 
-    public FlightPlan(String flightNumber, String airline, Pilot pilot, List<Waypoint> route, int altitude, String  departureTime, String  arrivalTime, FlightStatus status, List<AirspaceAuthority> airspaceAuthorities, Approval approvalStatus, LocalDateTime now) {
+    public FlightPlan(UUID id,String flightNumber, String airline, Pilot pilot, List<Waypoint> route, int altitude, String  departureTime, String  arrivalTime, FlightStatus status, List<AirspaceAuthority> airspaceAuthorities, Approval approvalStatus, LocalDateTime now) {
+        this.id = id;
         this.flightNumber = flightNumber;
         this.airline = airline;
         this.pilot = pilot;
