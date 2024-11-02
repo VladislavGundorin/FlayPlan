@@ -41,8 +41,9 @@ public class FlightPlanController {
         Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FlightPlanController.class).getFlightPlan(id)).withSelfRel();
         Link updateLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FlightPlanController.class).updateFlightPlan(id, null)).withRel("update");
         Link deleteLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FlightPlanController.class).deleteFlightPlan(id)).withRel("delete");
+        Link allLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FlightPlanController.class).getAllFlightPlans()).withSelfRel();
 
-        resource.add(selfLink, updateLink, deleteLink);
+        resource.add(selfLink, updateLink, deleteLink, allLink);
 
         return ResponseEntity.ok(resource);
     }

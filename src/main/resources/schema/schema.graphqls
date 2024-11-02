@@ -32,13 +32,30 @@ type Pilot {
     contactInfo: String
 }
 
-# Объединенный тип Query
+type Approval {
+    id: ID!
+    authorityId: ID!
+#    flightPlanId: ID!
+    status: ApprovalStatus!
+    approvedAt: String!
+    comments: String
+}
+enum ApprovalStatus {
+    PENDING
+    APPROVED
+    REJECTED
+}
+
 type Query {
     getFlightPlanById(id: ID!): FlightPlan
     getAllFlightPlans: [FlightPlan]
 
     getPilotById(id: ID!): Pilot
     getAllPilots: [Pilot!]!
+
+    getApprovalById(id: ID!): Approval
+    getAllApprovals: [Approval!]!
+    getApprovalsByFlightPlanId(flightPlanId: ID!): [Approval!]!
 }
 
 type Mutation {
@@ -74,6 +91,25 @@ type Mutation {
     createPilot(name: String!, licenseNumber: String!, contactInfo: String): Pilot!
     patchPilot(id: ID!, name: String, licenseNumber: String, contactInfo: String): Pilot!
     deletePilot(id: ID!): Boolean!
+
+    createApproval(
+        authorityId: ID!,
+        flightPlanId: ID!,
+        status: ApprovalStatus!,
+        approvedAt: String!,
+        comments: String
+    ): Approval!
+
+    updateApproval(
+        id: ID!,
+        authorityId: ID,
+        flightPlanId: ID,
+        status: ApprovalStatus,
+        approvedAt: String,
+        comments: String
+    ): Approval!
+
+    deleteApproval(id: ID!): Boolean!
 }
 
 input WaypointInput {
