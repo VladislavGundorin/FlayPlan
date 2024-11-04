@@ -1,5 +1,6 @@
 package org.example.flayplan.service.Impl;
 
+import org.example.flayplan.messaging.FlightMessageProducer;
 import org.example.flayplan.model.Approval;
 import org.example.flayplan.model.AirspaceAuthority;
 import org.example.flayplan.repository.ApprovalRepository;
@@ -26,6 +27,9 @@ public class ApprovalServiceImpl implements ApprovalService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private FlightMessageProducer flightMessageProducer;
+
     @Override
     public ApprovalDTO createApproval(ApprovalDTO dto) {
         AirspaceAuthority authority = airspaceAuthorityRepository.findById(dto.getAuthorityId())
@@ -39,6 +43,7 @@ public class ApprovalServiceImpl implements ApprovalService {
                 dto.getComments()
         );
         Approval savedApproval = approvalRepository.save(approval);
+        flightMessageProducer.sendFlightUpdate("approval.created", savedApproval.toString());
         return modelMapper.map(savedApproval, ApprovalDTO.class);
     }
 

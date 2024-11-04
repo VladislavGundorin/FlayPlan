@@ -1,5 +1,6 @@
 package org.example.flayplan.service.Impl;
 
+import org.example.flayplan.messaging.FlightMessageProducer;
 import org.example.flayplan.model.FlightPlan;
 import org.example.flayplan.model.Pilot;
 import org.example.flayplan.model.AirspaceAuthority;
@@ -33,6 +34,8 @@ public class FlightPlanServiceImpl implements FlightPlanService {
     private ApprovalRepository approvalRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private FlightMessageProducer flightMessageProducer;
 
     @Override
     public FlightPlanDTO createFlightPlan(FlightPlanDTO dto) {
@@ -59,6 +62,8 @@ public class FlightPlanServiceImpl implements FlightPlanService {
 
         flightPlan = flightPlanRepository.save(flightPlan);
 
+        flightMessageProducer.sendFlightUpdate("flight.plan.created", flightPlan.toString());
+
         FlightPlanDTO resultDto = modelMapper.map(flightPlan, FlightPlanDTO.class);
         resultDto.setAirspaceAuthorityIds(
                 flightPlan.getAirspaceAuthorities().stream()
@@ -74,13 +79,35 @@ public class FlightPlanServiceImpl implements FlightPlanService {
         FlightPlan flightPlan = flightPlanRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Flight Plan not found"));
 
-        return convertToDTO(flightPlan);
+        FlightPlanDTO flightPlanDTO = modelMapper.map(flightPlan, FlightPlanDTO.class);
+
+        flightPlanDTO.setAirspaceAuthorityIds(
+                flightPlan.getAirspaceAuthorities().stream()
+                        .map(AirspaceAuthority::getId)
+                        .collect(Collectors.toList())
+        );
+        flightPlanDTO.setApprovalId(
+                flightPlan.getApprovalStatus() != null ? flightPlan.getApprovalStatus().getId() : null
+        );
+
+        return flightPlanDTO;
     }
 
     @Override
     public List<FlightPlanDTO> getAllFlightPlans() {
         return flightPlanRepository.findAll().stream()
-                .map(this::convertToDTO)
+                .map(flightPlan -> {
+                    FlightPlanDTO flightPlanDTO = modelMapper.map(flightPlan, FlightPlanDTO.class);
+                    flightPlanDTO.setAirspaceAuthorityIds(
+                            flightPlan.getAirspaceAuthorities().stream()
+                                    .map(AirspaceAuthority::getId)
+                                    .collect(Collectors.toList())
+                    );
+                    flightPlanDTO.setApprovalId(
+                            flightPlan.getApprovalStatus() != null ? flightPlan.getApprovalStatus().getId() : null
+                    );
+                    return flightPlanDTO;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -116,29 +143,25 @@ public class FlightPlanServiceImpl implements FlightPlanService {
         flightPlan.setApprovalStatus(approvalStatus);
 
         flightPlan = flightPlanRepository.save(flightPlan);
-        return convertToDTO(flightPlan);
+
+        flightMessageProducer.sendFlightUpdate("flight.plan.updated", flightPlan.toString());
+
+        FlightPlanDTO flightPlanDTO = modelMapper.map(flightPlan, FlightPlanDTO.class);
+        flightPlanDTO.setAirspaceAuthorityIds(
+                flightPlan.getAirspaceAuthorities().stream()
+                        .map(AirspaceAuthority::getId)
+                        .collect(Collectors.toList())
+        );
+        flightPlanDTO.setApprovalId(
+                flightPlan.getApprovalStatus() != null ? flightPlan.getApprovalStatus().getId() : null
+        );
+
+        return flightPlanDTO;
     }
 
     @Override
     public void deleteFlightPlan(UUID id) {
         flightPlanRepository.deleteById(id);
-    }
-
-    private FlightPlanDTO convertToDTO(FlightPlan flightPlan) {
-        List<WaypointDTO> waypointDTOs = flightPlan.getRoute().stream()
-                .map(waypoint -> new WaypointDTO(waypoint.getId(), waypoint.getLatitude(), waypoint.getLongitude(), waypoint.getAltitude()))
-                .collect(Collectors.toList());
-
-        List<UUID> airspaceAuthorityIds = flightPlan.getAirspaceAuthorities().stream()
-                .map(AirspaceAuthority::getId)
-                .collect(Collectors.toList());
-
-        UUID approvalId = flightPlan.getApprovalStatus() != null ? flightPlan.getApprovalStatus().getId() : null;
-
-        return new FlightPlanDTO(flightPlan.getId(), flightPlan.getFlightNumber(), flightPlan.getAirline(),
-                flightPlan.getPilot().getId(), waypointDTOs, flightPlan.getAltitude(),
-                flightPlan.getDepartureTime(), flightPlan.getArrivalTime(), flightPlan.getStatus(),
-                airspaceAuthorityIds, approvalId);
     }
 
 }

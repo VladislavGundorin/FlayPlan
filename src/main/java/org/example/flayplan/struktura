@@ -28,3 +28,27 @@ Waypoint:
 Определяет координаты маршрута для FlightPlan. Каждый Waypoint содержит координаты (широту, долготу) и
 высоту, и используется для построения маршрута полета.
 
+
+
+{
+      "id": "347e3ae9-4c85-4de3-acda-324a74ebf824",
+      "airline": "VladDD",
+      "airspaceAuthorityIds": [
+        "bb92ee43-bcf0-4cd8-abe5-4ab39a46fa62"
+      ],
+      "altitude": 10,
+      "approvalId": "88d5077e-607c-46f1-810c-417c27909db9",
+      "arrivalTime": "2024-10-09 15:23:42.199638",
+      "departureTime": "2024-10-09 13:23:42.199638",
+      "flightNumber": "Num1111",
+      "pilotId": "a1afe602-17d6-462a-af20-6a31bdf808d8",
+      "status": "PENDING",
+      "route": [
+        {
+          "altitude": 10,
+          "latitude": 1.5,
+          "longitude": 1.5,
+          "id": "62bdb96c-51b6-42ea-847e-05b20843d506"
+        }
+      ]
+    }
