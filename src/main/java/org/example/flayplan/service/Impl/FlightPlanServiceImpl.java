@@ -10,6 +10,7 @@ import org.example.flayplan.repository.FlightPlanRepository;
 import org.example.flayplan.repository.PilotRepository;
 import org.example.flayplan.repository.AirspaceAuthorityRepository;
 import org.example.flayplan.repository.ApprovalRepository;
+import org.example.flayplan.service.AuditLogService;
 import org.example.flayplan.service.FlightPlanService;
 import org.example.flayplan.service.dtos.FlightPlanDTO;
 import org.example.flayplan.service.dtos.WaypointDTO;
@@ -36,6 +37,8 @@ public class FlightPlanServiceImpl implements FlightPlanService {
     private ModelMapper modelMapper;
     @Autowired
     private FlightMessageProducer flightMessageProducer;
+    @Autowired
+    private AuditLogService auditLogService;
 
     @Override
     public FlightPlanDTO createFlightPlan(FlightPlanDTO dto) {
@@ -63,6 +66,12 @@ public class FlightPlanServiceImpl implements FlightPlanService {
         flightPlan = flightPlanRepository.save(flightPlan);
 
         flightMessageProducer.sendFlightUpdate("flight.plan.created", flightPlan.toString());
+
+        auditLogService.logEvent(
+                "Create Flight Plan",
+                "System",
+                "Flight Plan created with ID: " + flightPlan.getId()
+        );
 
         FlightPlanDTO resultDto = modelMapper.map(flightPlan, FlightPlanDTO.class);
         resultDto.setAirspaceAuthorityIds(

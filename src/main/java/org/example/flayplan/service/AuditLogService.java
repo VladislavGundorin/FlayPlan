@@ -1,14 +1,19 @@
 package org.example.flayplan.service;
 
-import org.example.flayplan.service.dtos.AuditLogDTO;
+import org.example.flayplan.model.AuditLog;
+import org.example.flayplan.repository.AuditLogRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.time.LocalDateTime;
 
-public interface AuditLogService {
-    AuditLogDTO createAuditLog(AuditLogDTO dto);
-    AuditLogDTO getAuditLog(UUID id);
-    List<AuditLogDTO> getAllAuditLogs();
-    AuditLogDTO updateAuditLog(UUID id, AuditLogDTO dto);
-    void deleteAuditLog(UUID id);
+@Service
+public class AuditLogService {
+    @Autowired
+    private AuditLogRepository auditLogRepository;
+
+    public void logEvent(String action, String performedBy, String details) {
+        AuditLog log = new AuditLog(action, LocalDateTime.now(), performedBy, details);
+        auditLogRepository.save(log);
+    }
 }
