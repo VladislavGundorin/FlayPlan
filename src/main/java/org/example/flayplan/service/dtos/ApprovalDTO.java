@@ -1,15 +1,19 @@
 package org.example.flayplan.service.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.example.flayplan.enums.ApprovalStatus;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ApprovalDTO {
     private UUID id;
     private UUID authorityId;
     private ApprovalStatus status;
     private String approvedBy;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
     private LocalDateTime approvedAt;
     private String comments;
 
@@ -71,5 +75,18 @@ public class ApprovalDTO {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+
+    @Override
+    public String toString() {
+        return "ApprovalDTO{" +
+                "id=" + id +
+                ", authorityId=" + authorityId +
+                ", status=" + status +
+                ", approvedBy='" + approvedBy + '\'' +
+                ", approvedAt=" + approvedAt +
+                ", comments='" + comments + '\'' +
+                '}';
     }
 }

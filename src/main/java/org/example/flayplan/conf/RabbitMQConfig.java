@@ -4,27 +4,36 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String QUEUE_NAME = "productQueue";
-    public static final String EXCHANGE_NAME = "productExchange";
+    @Value("${spring.rabbitmq.exchange}")
+    private String exchangeName;
 
     @Bean
-    public Queue queue() {
-        return new Queue(QUEUE_NAME, true);
+    public Queue approvalRequestsQueue() {
+        return new Queue("approval.requests.queue", true);
+    }
+    @Bean
+    public Queue approvalUpdateQueue() {
+        return new Queue("approval.update.queue", true);
     }
 
     @Bean
     public TopicExchange exchange() {
-        return new TopicExchange(EXCHANGE_NAME);
+        return new TopicExchange(exchangeName);
     }
 
     @Bean
-    public Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("product.#");
+    public Binding approvalRequestsBinding() {
+        return BindingBuilder.bind(approvalRequestsQueue()).to(exchange()).with("approval.requests");
+    }
+    @Bean
+    public Binding approvalUpdateBinding() {
+        return BindingBuilder.bind(approvalUpdateQueue()).to(exchange()).with("approval.update");
     }
 }

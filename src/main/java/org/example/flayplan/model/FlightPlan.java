@@ -1,12 +1,13 @@
 package org.example.flayplan.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.example.flayplan.enums.FlightStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-
+@JsonIgnoreProperties({"pilot", "route", "airspaceAuthorities", "approvalStatus"})
 @Entity
 public class FlightPlan {
     @Id
@@ -43,7 +44,7 @@ public class FlightPlan {
     @JoinColumn(name = "approval_id")
     private Approval approvalStatus;
 
-    public FlightPlan(UUID id,String flightNumber, String airline, Pilot pilot, List<Waypoint> route, int altitude, String  departureTime, String  arrivalTime, FlightStatus status, List<AirspaceAuthority> airspaceAuthorities, Approval approvalStatus, LocalDateTime now) {
+    public FlightPlan(UUID id,String flightNumber, String airline, Pilot pilot, List<Waypoint> route, int altitude, String  departureTime, String  arrivalTime, FlightStatus status, List<AirspaceAuthority> airspaceAuthorities, Approval approvalStatus) {
         this.id = id;
         this.flightNumber = flightNumber;
         this.airline = airline;

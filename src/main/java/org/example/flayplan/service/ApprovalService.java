@@ -11,4 +11,5 @@ public interface ApprovalService {
     List<ApprovalDTO> getAllApprovals();
     ApprovalDTO updateApproval(UUID id, ApprovalDTO dto);
     void deleteApproval(UUID id);
+    ApprovalDTO updateApprovalStatus(ApprovalDTO approvalDTO);
 }

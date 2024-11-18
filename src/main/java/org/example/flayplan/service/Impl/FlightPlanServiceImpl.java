@@ -1,6 +1,7 @@
 package org.example.flayplan.service.Impl;
 
-import org.example.flayplan.messaging.FlightMessageProducer;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.flayplan.model.FlightPlan;
 import org.example.flayplan.model.Pilot;
 import org.example.flayplan.model.AirspaceAuthority;
@@ -13,7 +14,6 @@ import org.example.flayplan.repository.ApprovalRepository;
 import org.example.flayplan.service.AuditLogService;
 import org.example.flayplan.service.FlightPlanService;
 import org.example.flayplan.service.dtos.FlightPlanDTO;
-import org.example.flayplan.service.dtos.WaypointDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,13 +36,20 @@ public class FlightPlanServiceImpl implements FlightPlanService {
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
-    private FlightMessageProducer flightMessageProducer;
-    @Autowired
     private AuditLogService auditLogService;
 
     @Override
     public FlightPlanDTO createFlightPlan(FlightPlanDTO dto) {
         FlightPlan flightPlan = modelMapper.map(dto, FlightPlan.class);
+
+        if (dto.getId() != null) {
+            flightPlan.setId(dto.getId());
+        }
+
+        UUID pilotId = dto.getPilotId();
+        if (pilotId == null) {
+            throw new IllegalArgumentException("Pilot ID must not be null");
+        }
 
         Pilot pilot = pilotRepository.findById(dto.getPilotId())
                 .orElseThrow(() -> new RuntimeException("Pilot not found with ID: " + dto.getPilotId()));
@@ -65,7 +72,14 @@ public class FlightPlanServiceImpl implements FlightPlanService {
 
         flightPlan = flightPlanRepository.save(flightPlan);
 
-        flightMessageProducer.sendFlightUpdate("flight.plan.created", flightPlan.toString());
+        try {
+            Thread.sleep(5000);
+            String flightPlanJson = new ObjectMapper().writeValueAsString(flightPlan);
+        } catch (InterruptedException | JsonProcessingException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error serializing flight plan", e);
+        }
+
 
         auditLogService.logEvent(
                 "Create Flight Plan",
@@ -152,8 +166,6 @@ public class FlightPlanServiceImpl implements FlightPlanService {
         flightPlan.setApprovalStatus(approvalStatus);
 
         flightPlan = flightPlanRepository.save(flightPlan);
-
-        flightMessageProducer.sendFlightUpdate("flight.plan.updated", flightPlan.toString());
 
         FlightPlanDTO flightPlanDTO = modelMapper.map(flightPlan, FlightPlanDTO.class);
         flightPlanDTO.setAirspaceAuthorityIds(

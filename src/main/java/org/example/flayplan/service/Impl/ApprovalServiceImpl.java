@@ -1,11 +1,16 @@
 package org.example.flayplan.service.Impl;
 
-import org.example.flayplan.messaging.FlightMessageProducer;
+import org.example.flayplan.enums.ApprovalStatus;
+import org.example.flayplan.enums.FlightStatus;
+//import org.example.flayplan.messaging.ApprovalProducer;
 import org.example.flayplan.model.Approval;
 import org.example.flayplan.model.AirspaceAuthority;
+import org.example.flayplan.model.FlightPlan;
 import org.example.flayplan.repository.ApprovalRepository;
 import org.example.flayplan.repository.AirspaceAuthorityRepository;
+import org.example.flayplan.repository.FlightPlanRepository;
 import org.example.flayplan.service.ApprovalService;
+import org.example.flayplan.service.AuditLogService;
 import org.example.flayplan.service.dtos.ApprovalDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +33,12 @@ public class ApprovalServiceImpl implements ApprovalService {
     private ModelMapper modelMapper;
 
     @Autowired
-    private FlightMessageProducer flightMessageProducer;
+    private AuditLogService auditLogService;
+
+//    @Autowired
+//    private ApprovalProducer approvalProducer;
+    @Autowired
+    private FlightPlanRepository flightPlanRepository;
 
     @Override
     public ApprovalDTO createApproval(ApprovalDTO dto) {
@@ -43,7 +53,6 @@ public class ApprovalServiceImpl implements ApprovalService {
                 dto.getComments()
         );
         Approval savedApproval = approvalRepository.save(approval);
-        flightMessageProducer.sendFlightUpdate("approval.created", savedApproval.toString());
         return modelMapper.map(savedApproval, ApprovalDTO.class);
     }
 
@@ -87,4 +96,54 @@ public class ApprovalServiceImpl implements ApprovalService {
     public void deleteApproval(UUID id) {
         approvalRepository.deleteById(id);
     }
+
+    @Override
+    public ApprovalDTO updateApprovalStatus(ApprovalDTO approvalDTO) {
+
+        Approval approval = approvalRepository.findById(approvalDTO.getId())
+                .orElseThrow(() -> new RuntimeException("Approval not found"));
+
+        approval.setStatus(approvalDTO.getStatus());
+        approval.setApprovedBy(approvalDTO.getApprovedBy());
+        approval.setApprovedAt(approvalDTO.getApprovedAt());
+        approval.setComments(approvalDTO.getComments());
+
+        auditLogService.logEvent(
+                "Approval Status Updated",
+                approvalDTO.getApprovedBy(),
+                "Approval ID: " + approvalDTO.getId() + ", Status: " + approvalDTO.getStatus()
+        );
+
+        approval = approvalRepository.save(approval);
+
+        FlightPlan flightPlan = flightPlanRepository.findByApprovalStatus_Id(approval.getId());
+        if (flightPlan != null) {
+            FlightStatus flightStatus = mapApprovalStatusToFlightStatus(approvalDTO.getStatus());
+            flightPlan.setStatus(flightStatus);
+            flightPlanRepository.save(flightPlan);
+        }
+
+        return new ApprovalDTO(
+                approval.getId(),
+                approval.getAuthority().getId(),
+                approval.getStatus(),
+                approval.getApprovedBy(),
+                approval.getApprovedAt(),
+                approval.getComments()
+        );
+    }
+
+    private FlightStatus mapApprovalStatusToFlightStatus(ApprovalStatus approvalStatus) {
+        switch (approvalStatus) {
+            case APPROVED:
+                return FlightStatus.APPROVED;
+            case DENIED:
+                return FlightStatus.DENIED;
+            case PENDING:
+                return FlightStatus.PENDING;
+            default:
+                throw new IllegalArgumentException("Unknown ApprovalStatus: " + approvalStatus);
+        }
+    }
+
 }

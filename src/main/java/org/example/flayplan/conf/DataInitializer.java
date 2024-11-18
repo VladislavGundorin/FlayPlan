@@ -50,7 +50,7 @@ public class DataInitializer implements CommandLineRunner {
 
         Approval approval = new Approval();
         approval.setAuthority(authority);
-        approval.setStatus(ApprovalStatus.APPROVED);
+        approval.setStatus(ApprovalStatus.PENDING);
         approval.setApprovedBy("Admin");
         approval.setApprovedAt(LocalDateTime.now());
         approval.setComments("Initial approval");

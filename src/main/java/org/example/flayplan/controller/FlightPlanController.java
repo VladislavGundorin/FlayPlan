@@ -22,7 +22,7 @@ public class FlightPlanController {
     private FlightPlanService flightPlanService;
 
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<EntityModel<FlightPlanDTO>> createFlightPlan(@RequestBody FlightPlanDTO flightPlanDTO) {
         FlightPlanDTO createdFlightPlan = flightPlanService.createFlightPlan(flightPlanDTO);
 
