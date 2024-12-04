@@ -3,8 +3,8 @@ package org.example.flayplan.resolver;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsMutation;
 import com.netflix.graphql.dgs.DgsQuery;
+import org.example.dtos.PilotDTO;
 import org.example.flayplan.service.PilotService;
-import org.example.flayplan.service.dtos.PilotDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

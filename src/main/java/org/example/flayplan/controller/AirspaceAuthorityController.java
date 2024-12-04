@@ -1,7 +1,8 @@
 package org.example.flayplan.controller;
 
+import org.example.controllers.AirspaceAuthorityApi;
+import org.example.dtos.AirspaceAuthorityDTO;
 import org.example.flayplan.service.AirspaceAuthorityService;
-import org.example.flayplan.service.dtos.AirspaceAuthorityDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/airspace-authority")
-public class AirspaceAuthorityController {
+public class AirspaceAuthorityController implements AirspaceAuthorityApi {
     @Autowired
     private AirspaceAuthorityService airspaceAuthorityService;
 

@@ -1,8 +1,8 @@
 package org.example.flayplan.service.Impl;
 
-import org.example.flayplan.enums.ApprovalStatus;
-import org.example.flayplan.enums.FlightStatus;
-//import org.example.flayplan.messaging.ApprovalProducer;
+import org.example.dtos.ApprovalDTO;
+import org.example.dtos.enums.ApprovalStatus;
+import org.example.dtos.enums.FlightStatus;
 import org.example.flayplan.model.Approval;
 import org.example.flayplan.model.AirspaceAuthority;
 import org.example.flayplan.model.FlightPlan;
@@ -11,7 +11,6 @@ import org.example.flayplan.repository.AirspaceAuthorityRepository;
 import org.example.flayplan.repository.FlightPlanRepository;
 import org.example.flayplan.service.ApprovalService;
 import org.example.flayplan.service.AuditLogService;
-import org.example.flayplan.service.dtos.ApprovalDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,8 +34,6 @@ public class ApprovalServiceImpl implements ApprovalService {
     @Autowired
     private AuditLogService auditLogService;
 
-//    @Autowired
-//    private ApprovalProducer approvalProducer;
     @Autowired
     private FlightPlanRepository flightPlanRepository;
 

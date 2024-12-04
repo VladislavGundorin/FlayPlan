@@ -1,9 +1,9 @@
 package org.example.flayplan.service.Impl;
 
+import org.example.dtos.PilotDTO;
 import org.example.flayplan.model.Pilot;
 import org.example.flayplan.repository.PilotRepository;
 import org.example.flayplan.service.PilotService;
-import org.example.flayplan.service.dtos.PilotDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

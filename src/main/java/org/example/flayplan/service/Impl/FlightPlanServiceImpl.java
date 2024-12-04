@@ -2,6 +2,7 @@ package org.example.flayplan.service.Impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.dtos.FlightPlanDTO;
 import org.example.flayplan.model.FlightPlan;
 import org.example.flayplan.model.Pilot;
 import org.example.flayplan.model.AirspaceAuthority;
@@ -13,7 +14,6 @@ import org.example.flayplan.repository.AirspaceAuthorityRepository;
 import org.example.flayplan.repository.ApprovalRepository;
 import org.example.flayplan.service.AuditLogService;
 import org.example.flayplan.service.FlightPlanService;
-import org.example.flayplan.service.dtos.FlightPlanDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

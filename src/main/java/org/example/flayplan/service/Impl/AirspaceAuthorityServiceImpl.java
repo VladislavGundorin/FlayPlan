@@ -1,10 +1,10 @@
 package org.example.flayplan.service.Impl;
 
 
+import org.example.dtos.AirspaceAuthorityDTO;
 import org.example.flayplan.model.AirspaceAuthority;
 import org.example.flayplan.repository.AirspaceAuthorityRepository;
 import org.example.flayplan.service.AirspaceAuthorityService;
-import org.example.flayplan.service.dtos.AirspaceAuthorityDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

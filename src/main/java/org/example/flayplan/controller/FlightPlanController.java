@@ -1,7 +1,8 @@
 package org.example.flayplan.controller;
 
+import org.example.controllers.FlightPlanApi;
+import org.example.dtos.FlightPlanDTO;
 import org.example.flayplan.service.FlightPlanService;
-import org.example.flayplan.service.dtos.FlightPlanDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -16,7 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/flight-plans")
-public class FlightPlanController {
+public class FlightPlanController implements FlightPlanApi {
 
     @Autowired
     private FlightPlanService flightPlanService;

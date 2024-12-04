@@ -1,8 +1,8 @@
 package org.example.flayplan.messaging;
 
+import org.example.dtos.ApprovalDTO;
 import org.example.flayplan.service.ApprovalService;
 import org.example.flayplan.service.AuditLogService;
-import org.example.flayplan.service.dtos.ApprovalDTO;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

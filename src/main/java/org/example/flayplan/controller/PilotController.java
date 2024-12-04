@@ -1,7 +1,8 @@
 package org.example.flayplan.controller;
 
+import org.example.controllers.PilotApi;
+import org.example.dtos.PilotDTO;
 import org.example.flayplan.service.PilotService;
-import org.example.flayplan.service.dtos.PilotDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -18,7 +19,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/pilots")
-public class PilotController {
+public class PilotController  implements PilotApi {
 
     @Autowired
     private PilotService pilotService;

@@ -1,7 +1,8 @@
 package org.example.flayplan.controller;
 
+import org.example.controllers.ApprovalApi;
+import org.example.dtos.ApprovalDTO;
 import org.example.flayplan.service.ApprovalService;
-import org.example.flayplan.service.dtos.ApprovalDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -18,7 +19,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/approval")
-public class ApprovalController {
+public class ApprovalController implements ApprovalApi {
 
     @Autowired
     private ApprovalService approvalService;

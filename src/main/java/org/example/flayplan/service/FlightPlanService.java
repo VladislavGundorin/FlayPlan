@@ -1,6 +1,7 @@
 package org.example.flayplan.service;
 
-import org.example.flayplan.service.dtos.FlightPlanDTO;
+
+import org.example.dtos.FlightPlanDTO;
 
 import java.util.List;
 import java.util.UUID;

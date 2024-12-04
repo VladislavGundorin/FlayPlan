@@ -1,7 +1,7 @@
 package org.example.flayplan.model;
 
 import jakarta.persistence.*;
-import org.example.flayplan.enums.ApprovalStatus;
+import org.example.dtos.enums.ApprovalStatus;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

@@ -2,7 +2,7 @@ package org.example.flayplan.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import org.example.flayplan.enums.FlightStatus;
+import org.example.dtos.enums.FlightStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;

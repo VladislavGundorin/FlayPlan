@@ -1,7 +1,7 @@
 package org.example.flayplan.conf;
 
-import org.example.flayplan.enums.ApprovalStatus;
-import org.example.flayplan.enums.FlightStatus;
+import org.example.dtos.enums.ApprovalStatus;
+import org.example.dtos.enums.FlightStatus;
 import org.example.flayplan.model.*;
 import org.example.flayplan.repository.*;
 import org.springframework.boot.CommandLineRunner;

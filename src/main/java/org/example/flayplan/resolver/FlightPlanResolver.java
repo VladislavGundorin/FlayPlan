@@ -3,13 +3,13 @@ package org.example.flayplan.resolver;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsMutation;
 import com.netflix.graphql.dgs.DgsQuery;
-import org.example.flayplan.enums.FlightStatus;
+import org.example.dtos.FlightPlanDTO;
+import org.example.dtos.WaypointDTO;
+import org.example.dtos.enums.FlightStatus;
 import org.example.flayplan.service.FlightPlanService;
-import org.example.flayplan.service.dtos.FlightPlanDTO;
-import org.example.flayplan.service.dtos.WaypointDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -83,31 +83,3 @@ public class FlightPlanResolver {
         return true;
     }
 }
-//mutation {
-//    updateFlightPlan(
-//        id: "10c04135-8b9a-4bba-884d-5452b6e407be",
-//        flightNumber: "FL456",
-//        airline: "Updated Airline",
-//        pilotId: "01fe1bf3-dd0e-4a69-9a14-8b3a609d568a",
-//        route: [{ latitude: 34.0522, longitude: -118.2437, altitude: 31000 }],
-//        altitude: 31000,
-//        departureTime: "2024-10-09T14:30:00",
-//        arrivalTime: "2024-10-09T16:30:00",
-//        status: PENDING,
-//        airspaceAuthorityIds: ["ca1b653e-0ada-4ecf-9d4d-4ec025810873"],
-//        approvalId: "772cc641-8281-416e-8c42-be3fa2916472"
-//    ) {
-//        id
-//        flightNumber
-//        airline
-//        route {
-//            latitude
-//            longitude
-//            altitude
-//        }
-//        altitude
-//        departureTime
-//        arrivalTime
-//        status
-//    }
-//}
