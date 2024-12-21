@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -45,6 +47,7 @@ public class DataInitializer implements CommandLineRunner {
         AirspaceAuthority authority = new AirspaceAuthority();
         authority.setName("FAA");
         authority.setRegion("USA");
+//        authority.setRegion(generateRandomRegion());
         authority.setContactInfo("contact@faa.gov");
         airspaceAuthorityRepository.save(authority);
 
@@ -71,4 +74,10 @@ public class DataInitializer implements CommandLineRunner {
         flightPlanRepository.save(flightPlan1);
 
     }
+    private String generateRandomRegion() {
+        List<String> allRegions = Arrays.asList("USA", "RU", "BY", "CN", "IN", "DE");
+        int randomIndex = ThreadLocalRandom.current().nextInt(allRegions.size());
+        return allRegions.get(randomIndex);
+    }
+
 }

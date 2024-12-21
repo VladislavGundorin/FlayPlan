@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package airspace;
+
+service AirspaceAuthorityService {
+  rpc GetAirspaceAuthorities (AirspaceFilterRequest) returns (AirspaceAuthoritiesResponse);
+}
+
+message AirspaceFilterRequest {
+  string region = 1;
+}
+
+message AirspaceAuthority {
+  string id = 1;
+  string name = 2;
+  string region = 3;
+  string contactInfo = 4;
+}
+
+message AirspaceAuthoritiesResponse {
+  repeated AirspaceAuthority authorities = 1;
+}

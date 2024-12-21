@@ -57,4 +57,16 @@ public class AirspaceAuthorityServiceImpl implements AirspaceAuthorityService {
     public void deleteAirspaceAuthority(UUID id) {
         repository.deleteById(id);
     }
+    @Override
+    public List<AirspaceAuthorityDTO> getAllAirspaceAuthorities(String region) {
+        List<AirspaceAuthority> authorities;
+        if (region != null && !region.isEmpty()) {
+            authorities = repository.findByRegion(region);
+        } else {
+            authorities = repository.findAll();
+        }
+        return authorities.stream()
+                .map(a -> new AirspaceAuthorityDTO(a.getId(), a.getName(), a.getRegion(), a.getContactInfo()))
+                .collect(Collectors.toList());
+    }
 }

@@ -12,4 +12,5 @@ public interface AirspaceAuthorityService {
     List<AirspaceAuthorityDTO> getAllAirspaceAuthorities();
     AirspaceAuthorityDTO updateAirspaceAuthority(UUID id, AirspaceAuthorityDTO dto);
     void deleteAirspaceAuthority(UUID id);
+    List<AirspaceAuthorityDTO> getAllAirspaceAuthorities(String region);
 }
