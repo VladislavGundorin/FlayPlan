@@ -18,6 +18,7 @@ public class RabbitMQConfig {
     public Queue approvalRequestsQueue() {
         return new Queue("approval.requests.queue", true);
     }
+
     @Bean
     public Queue approvalUpdateQueue() {
         return new Queue("approval.update.queue", true);
@@ -32,8 +33,10 @@ public class RabbitMQConfig {
     public Binding approvalRequestsBinding() {
         return BindingBuilder.bind(approvalRequestsQueue()).to(exchange()).with("approval.requests");
     }
+
     @Bean
     public Binding approvalUpdateBinding() {
         return BindingBuilder.bind(approvalUpdateQueue()).to(exchange()).with("approval.update");
     }
+
 }

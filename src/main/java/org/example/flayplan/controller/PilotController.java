@@ -1,7 +1,9 @@
 package org.example.flayplan.controller;
 
+import jakarta.validation.Valid;
 import org.example.controllers.PilotApi;
 import org.example.dtos.PilotDTO;
+import org.example.exceptions.ResourceNotFoundException;
 import org.example.flayplan.service.PilotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
@@ -25,7 +27,7 @@ public class PilotController  implements PilotApi {
     private PilotService pilotService;
 
     @PostMapping
-    public ResponseEntity<EntityModel<PilotDTO>> createPilot(@RequestBody PilotDTO pilotDTO) {
+    public ResponseEntity<EntityModel<PilotDTO>> createPilot(@RequestBody @Valid PilotDTO pilotDTO) {
         PilotDTO createdPilot = pilotService.createPilot(pilotDTO);
         EntityModel<PilotDTO> resource = EntityModel.of(createdPilot);
         Link selfLink = linkTo(methodOn(PilotController.class).getPilot(createdPilot.getId())).withSelfRel();
@@ -38,7 +40,7 @@ public class PilotController  implements PilotApi {
         PilotDTO pilot = pilotService.getPilot(id);
 
         if (pilot == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new ResourceNotFoundException("Pilot with ID " + id + " not found");
         }
 
         EntityModel<PilotDTO> resource = EntityModel.of(pilot,
@@ -49,6 +51,7 @@ public class PilotController  implements PilotApi {
 
         return ResponseEntity.ok(resource);
     }
+
 
 
     @GetMapping

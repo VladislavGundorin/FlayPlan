@@ -1,6 +1,8 @@
 package org.example.flayplan.model;
 
 import jakarta.persistence.*;
+import org.example.dtos.enums.LogLevel;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -14,15 +16,24 @@ public class AuditLog {
     private LocalDateTime timestamp;
     private String performedBy;
     private String details;
+    private LogLevel level;
 
-    public AuditLog(String action, LocalDateTime timestamp, String performedBy, String details) {
+    public AuditLog(String action, LocalDateTime timestamp, String performedBy, String details,LogLevel level) {
         this.action = action;
         this.timestamp = timestamp;
         this.performedBy = performedBy;
         this.details = details;
+        this.level = level;
     }
 
     public AuditLog() {
+    }
+    public LogLevel getLevel() {
+        return level;
+    }
+
+    public void setLevel(LogLevel level) {
+        this.level = level;
     }
 
     public UUID getId() {

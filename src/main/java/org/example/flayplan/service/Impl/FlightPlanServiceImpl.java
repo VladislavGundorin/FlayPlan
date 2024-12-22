@@ -2,7 +2,9 @@ package org.example.flayplan.service.Impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.juli.logging.Log;
 import org.example.dtos.FlightPlanDTO;
+import org.example.dtos.enums.LogLevel;
 import org.example.flayplan.model.FlightPlan;
 import org.example.flayplan.model.Pilot;
 import org.example.flayplan.model.AirspaceAuthority;
@@ -84,7 +86,8 @@ public class FlightPlanServiceImpl implements FlightPlanService {
         auditLogService.logEvent(
                 "Create Flight Plan",
                 "System",
-                "Flight Plan created with ID: " + flightPlan.getId()
+                "Flight Plan created with ID: " + flightPlan.getId(),
+                LogLevel.INFO
         );
 
         FlightPlanDTO resultDto = modelMapper.map(flightPlan, FlightPlanDTO.class);

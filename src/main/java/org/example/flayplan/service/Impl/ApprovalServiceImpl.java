@@ -3,6 +3,7 @@ package org.example.flayplan.service.Impl;
 import org.example.dtos.ApprovalDTO;
 import org.example.dtos.enums.ApprovalStatus;
 import org.example.dtos.enums.FlightStatus;
+import org.example.dtos.enums.LogLevel;
 import org.example.flayplan.model.Approval;
 import org.example.flayplan.model.AirspaceAuthority;
 import org.example.flayplan.model.FlightPlan;
@@ -105,11 +106,12 @@ public class ApprovalServiceImpl implements ApprovalService {
         approval.setApprovedAt(approvalDTO.getApprovedAt());
         approval.setComments(approvalDTO.getComments());
 
-        auditLogService.logEvent(
-                "Approval Status Updated",
-                approvalDTO.getApprovedBy(),
-                "Approval ID: " + approvalDTO.getId() + ", Status: " + approvalDTO.getStatus()
-        );
+//        auditLogService.logEvent(
+//                "Approval Status Updated",
+//                approvalDTO.getApprovedBy(),
+//                "Approval ID: " + approvalDTO.getId() + ", Status: " + approvalDTO.getStatus(),
+//                LogLevel.INFO
+//        );
 
         approval = approvalRepository.save(approval);
 

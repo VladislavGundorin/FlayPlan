@@ -1,0 +1,105 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <title>WebSocket Test</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>WebSocket Notifications</h1>-->
+<!--<ul id="messages"></ul>-->
+<!--<script>-->
+<!--    const socket = new WebSocket("ws://localhost:8080/ws/notifications");-->
+
+<!--    socket.onmessage = function(event) {-->
+<!--        const message = document.createElement("li");-->
+<!--        message.textContent = event.data;-->
+<!--        document.getElementById("messages").appendChild(message);-->
+<!--    };-->
+
+<!--    socket.onopen = function() {-->
+<!--        console.log("WebSocket connected");-->
+<!--    };-->
+
+<!--    socket.onerror = function(error) {-->
+<!--        console.error("WebSocket error:", error);-->
+<!--    };-->
+
+<!--    socket.onclose = function() {-->
+<!--        console.log("WebSocket connection closed");-->
+<!--    };-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <title>WebSocket Notifications</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>WebSocket Notifications</h1>-->
+<!--<ul id="messages"></ul>-->
+
+<!--<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>-->
+<!--<script>-->
+<!--    const socket = new SockJS('/ws');-->
+<!--    const stompClient = Stomp.over(socket);-->
+
+<!--    let seenMessages = new Set();-->
+
+<!--    stompClient.connect({}, function (frame) {-->
+<!--        console.log('Connected: ' + frame);-->
+<!--        stompClient.subscribe('/topic/audit-logs', function (messageOutput) {-->
+<!--            const log = JSON.parse(messageOutput.body);-->
+
+<!--            const uniqueKey = `${log.action}-${log.details}`;-->
+
+<!--            if (!seenMessages.has(uniqueKey)) {-->
+<!--                const messageElement = document.createElement("li");-->
+<!--                messageElement.textContent = `Action: ${log.action}, Performed By: ${log.performedBy}, Details: ${log.details}, Level: ${log.level}`;-->
+<!--                document.getElementById("messages").appendChild(messageElement);-->
+
+<!--                seenMessages.add(uniqueKey);-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
+
+<!--    stompClient.onError = (error) => {-->
+<!--        console.error("WebSocket error:", error);-->
+<!--    };-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Notifications</title>
+</head>
+<body>
+<h1>WebSocket Notifications</h1>
+<ul id="messages"></ul>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+<script>
+    const socket = new SockJS('/ws');
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/audit-logs', function (messageOutput) {
+            const log = JSON.parse(messageOutput.body);
+
+            const messageElement = document.createElement("li");
+            messageElement.textContent = `Action: ${log.action}, Performed By: ${log.performedBy}, Details: ${log.details}, Level: ${log.level}`;
+            document.getElementById("messages").appendChild(messageElement);
+        });
+    });
+
+    stompClient.onError = (error) => {
+        console.error("WebSocket error:", error);
+    };
+</script>
+</body>
+</html>
